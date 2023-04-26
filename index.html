@@ -1,0 +1,118 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<style>
+ div.container {
+      display:inline-block;
+    }
+</style>
+<head>
+  <link rel="stylesheet" href="gaggle.css">
+  <title>jsSHA - SHA Hashes in JavaScript</title>
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <script type="text/javascript" src="sha.js"></script>
+  <script src="blockies.js"></script>
+   <script src="hqx.js"></script>
+  <script type="text/javascript">
+
+    function calcHash() {
+      try {
+        var hashInput = document.getElementById("hashInputText");
+        var hashInputType = document.getElementById("hashInputType");
+        var hashVariant = document.getElementById("hashVariant");
+        var hashRounds = document.getElementById("hashRounds");
+        var hashOutputType = document.getElementById("hashOutputType");
+        var hashOutput = document.getElementById("hashOutputText");
+        var hashObj = new jsSHA(
+          hashVariant.options[hashVariant.selectedIndex].value,
+          hashInputType.options[hashInputType.selectedIndex].value,
+          {numRounds: parseInt(hashRounds.value, 10)}
+        );
+        hashObj.update(hashInput.value);
+        hashOutput.value = hashObj.getHash(hashOutputType.options[hashOutputType.selectedIndex].value);
+        drawBlockie(hashOutput.value);
+      } catch(e) {
+        hashOutput.value = e.message;
+      }
+
+    }
+    var drawBlockie  = (seed) => {
+
+      var source = blockies.create({ seed:seed ,size: 8,scale: 1});
+      var icon = document.getElementById("myImageContainer");
+      icon.className = "icon";
+      var image = document.getElementById("myImage");
+      //image.src = blockies.create({ seed:seed ,size: 8,scale: 16}).toDataURL();
+      //icon.appendChild( image );
+      var child = hqx(hqx(source, 4), 4);
+      icon.appendChild( child );
+      var shadow = document.createElement('div');
+      document.body.appendChild(icon);
+    };
+  
+  </script>
+</head>
+<body onload="calcHash();">
+  <div id="container">
+    <div>
+      <form action="#" method="get">
+        <fieldset>
+          <legend>Hash Demo</legend>
+          <div>
+            <label for="hashInputText">Input Text:</label>
+            <input type="text" size="75" name="hashInputText" id="hashInputText" onkeyup="calcHash()" />
+          </div>
+          <div>
+            <label for="hashInputType">Input Type:</label>
+            <select name="hashInputType" id="hashInputType" onchange="calcHash()">
+              <option value="B64">Base-64</option>
+              <option selected="selected">TEXT</option>
+              <option>HEX</option>
+            </select>
+          </div>
+          <div>
+            <label for="hashVariant">SHA Variant:</label>
+            <select name="hashVariant" id="hashVariant" onchange="calcHash()">
+              <option>SHA-256</option>
+              <option>SHA3-256</option>
+            </select>
+          </div>
+          <div>
+            <label for="hashRounds">Number of Rounds:</label><input type="text" size="5" name="hashRounds" id="hashRounds" value="1" onkeyup="calcHash()" />
+          </div>
+          <div>
+            <label for="hashOutputType">Output Type:</label>
+            <select name="hashOutputType" id="hashOutputType" onchange="calcHash()">
+              <option value="B64">Base-64</option>
+              <option selected="selected">HEX</option>
+            </select>
+          </div>
+          <div>
+            <label for="hashOutputText">Output Hash:</label>
+            <input type="text" size="75" name="hashOutputText" id="hashOutputText" style="background-color: #b1ceed" />
+          </div>
+          <div id="myImageContainer">
+            <img id ='myImage'  width = "100"> 
+          </div>
+        </fieldset>
+     
+      </form>
+ 
+    </div>
+  </div>
+ 
+    <div id="copyright">
+      Copyright &copy; 2008-2017 <a href="https://github.com/Caligatio/">Brian Turek</a>
+    </div>
+  </div>
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2442290-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</body>
+</html>
